@@ -1,0 +1,166 @@
+/* -------------------------------------------- */
+/* GLOBAL LAYOUT */
+/* -------------------------------------------- */
+body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    margin: 15px;
+    color: #111;
+    font-size: 13px; 
+    overflow: visible !important;   
+
+}
+
+@page {
+    size: A4;
+    margin: 0.15in;
+}
+
+section {
+    margin-top: 18px;
+    /* page-break-inside: avoid; */
+        page-break-inside: auto;
+
+}
+
+h1 {
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 6px;
+    color: #1a1c31;
+}
+
+.links {
+    text-align: center;
+    margin-bottom: 14px;
+    font-size: 12px;
+}
+
+.links a {
+    color: #0a75c2;
+    text-decoration: none;
+}
+
+h2 {
+    font-size: 15px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 3px;
+    color: #1a1c31;
+    margin-bottom: 8px;
+}
+
+/* -------------------------------------------- */
+/* EDUCATION */
+/* -------------------------------------------- */
+.row-flex {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.muted {
+    color: #111111;
+}
+
+.right-date {
+    min-width: 120px;
+    text-align: right;
+}
+
+/* -------------------------------------------- */
+/* EXPERIENCE */
+/* -------------------------------------------- */
+.exp-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3px;
+}
+
+.exp-row strong {
+    font-weight: 700;
+}
+
+ul {
+    margin: 4px 0 6px 18px;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 4px;
+    /* text-align: justify; */
+}
+
+/* -------------------------------------------- */
+/* PROJECTS */
+/* -------------------------------------------- */
+.proj-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2px;
+}
+
+.proj-header strong {
+    font-size: 14px;
+}
+
+.proj-meta {
+    font-size: 12px;
+    margin-bottom: 4px;
+}
+
+/* -------------------------------------------- */
+/* TEXT */
+p {
+    text-align: justify;
+}
+
+
+/* Only prevent splitting row headers */
+.row-flex,
+.exp-row,
+.proj-row {
+    page-break-inside: avoid;
+}
+
+ul {
+    page-break-inside: auto;    /* <- FIX */
+}
+
+
+
+
+
+/* PAGE MARGINS — tightened */
+@page {
+    size: A4;
+    margin: 0.15in 0.35in 0.10in 0.35in; /* top right bottom left */
+}
+
+
+/* Last section bottom spacing */
+section:last-of-type {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+
+section { margin-top: 15px; }
+li { margin-bottom: 2px; }
+body { line-height: 1.25; }
+
+
+
+
+/* ----------------------------------- */
+@page {
+    size: A4;
+    margin: 0.5in;
+}
+
+body {
+    overflow: visible !important;
+}
+
+section {
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+}

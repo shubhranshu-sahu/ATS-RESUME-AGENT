@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Resume Agent</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; background:#f6f8fb; margin:0; padding:0}
+    .container{max-width:880px;margin:40px auto;background:#fff;padding:28px;border-radius:8px;box-shadow:0 6px 20px rgba(20,30,50,.08)}
+    h1{margin:0 0 6px;color:#0b4f6c}
+    p.lead{color:#556; margin-top:0}
+    form{margin-top:18px}
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    input[type=file]{padding:8px}
+    input[type=text]{flex:1;padding:10px;border:1px solid #ddd;border-radius:6px}
+    button{background:#0b4f6c;color:#fff;padding:10px 14px;border:none;border-radius:6px;cursor:pointer}
+    .result{margin-top:20px;padding:12px;border-radius:6px;background:#f3fbff;border:1px solid #e0f2ff}
+    .links a{display:inline-block;margin-right:10px;margin-top:6px}
+    .small{font-size:0.9rem;color:#666}
+    .note{font-size:0.85rem;color:#666;margin-top:8px}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Resume Agent</h1>
+    <p class="lead">Upload a PDF or DOCX resume. The backend will parse, analyze and return an enhanced resume (DOCX + PDF if available).</p>
+
+    <form method="POST" action="/" enctype="multipart/form-data">
+      <div class="row">
+        <input type="file" name="resume_file" accept=".pdf,.docx" required />
+        <input type="text" name="job_description" placeholder="Optional: paste job description text (to tailor resume)" />
+        <button type="submit">Upload & Generate</button>
+      </div>
+      <div class="note">Accepted: .pdf, .docx — max file size depends on your Flask configuration.</div>
+    </form>
+
+    {% if error %}
+      <div class="result" style="border-color:#ffd6d6;background:#fff0f0;color:#800;">Error: {{ error }}</div>
+    {% endif %}
+
+    {% if result %}
+      <div class="result">
+        <div><strong>Candidate:</strong> {{ result.candidate or "—" }}</div>
+        <div class="small">ATS Score: {{ result.ats_result.ats_score if result.ats_result else "—" }} | JD Match: {{ result.ats_result.jd_match if result.ats_result else "—" }}</div>
+
+        <div class="links" style="margin-top:10px">
+          {% if result.docx_name %}
+              <a href="{{ url_for('download_file', filename=result.docx_name) }}" download>Download DOCX</a>
+            {% endif %}
+
+            {% if result.pdf_name %}
+              <a href="{{ url_for('download_file', filename=result.pdf_name) }}" download>Download PDF</a>
+            {% endif %}
+
+        </div>
+
+        <details style="margin-top:12px">
+          <summary>Structured resume (JSON)</summary>
+          <pre style="white-space:pre-wrap; margin-top:8px; max-height:360px; overflow:auto; background:#fff; padding:10px; border-radius:6px; border:1px solid #eee;">{{ result.structured_resume | tojson(indent=2) }}</pre>
+        </details>
+      </div>
+    {% endif %}
+
+  </div>
+</body>
+</html>
