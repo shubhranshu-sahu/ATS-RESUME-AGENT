@@ -154,29 +154,43 @@ def format_education_entry(e: dict) -> dict:
     grade = out.get("grade")
 
     if grade:
-        # Remove unwanted prefixes like:
-        # "CGPA: 9.2", "Grade - 85%", "Aggregate: 82%", "Percentage: 91%"
-        grade_clean = re.sub(
-            r"^(cgpa|grade|aggregate|agg|percentage|percent|score)\s*[:\-]\s*",
+        g = grade.strip()
+
+        # 2A. Remove leading prefixes:
+        g = re.sub(
+            r"^(cgpa|grade|aggregate|agg|percentage|percent|score)\s*[:\-]?\s*",
             "",
-            grade,
+            g,
             flags=re.I
         ).strip()
 
-        # Also remove trailing "%" spaces like "82% " → "82%"
-        grade_clean = grade_clean.replace("Aggregate", "").strip()
+        # 2B. Remove trailing labels like: "CGPA", "Grade", "Aggregate"
+        g = re.sub(
+            r"(cgpa|grade|aggregate|agg|percentage|percent|score)\s*$",
+            "",
+            g,
+            flags=re.I
+        ).strip()
 
-        out["grade"] = grade_clean
+        # 2C. If number extracted from "CGPA: 9.2/10"
+        # Remove duplicate internal prefixes
+        g = re.sub(r"(cgpa|grade|aggregate)\s*", "", g, flags=re.I).strip()
 
-        # Add our OWN prefix
+        # 2D. Remove stray symbols
+        g = g.replace(":", "").strip()
+
+        out["grade"] = g
+
+        # Now add correct label
         if etype == "college":
-            out["grade_label"] = f"CGPA: {grade_clean}"
+            out["grade_label"] = f"CGPA: {g}"
         elif etype == "school":
-            out["grade_label"] = f"Grade: {grade_clean}"
+            out["grade_label"] = f"Grade: {g}"
         else:
-            out["grade_label"] = grade_clean
+            out["grade_label"] = g
     else:
         out["grade_label"] = None
+
 
 
     # --------------------------
